@@ -1,0 +1,93 @@
+services:
+  # Ollama service for LLM and embedding models
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - app_network
+
+  # Model initialization service (runs once to pull models)
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Waiting for Ollama service..."
+        sleep 5
+        echo "Pulling smollm2:135m model..."
+        ollama pull smollm2:135m
+        echo "Pulling nomic-embed-text model..."
+        ollama pull nomic-embed-text
+        echo "Models successfully pulled!"
+    networks:
+      - app_network
+    restart: "no"
+
+  # Phoenix observability platform
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    container_name: phoenix
+    ports:
+      - "6006:6006"  # Phoenix UI and OTLP HTTP
+      - "4317:4317"  # OTLP gRPC
+    environment:
+      - PHOENIX_HOST=0.0.0.0
+      - PHOENIX_PORT=6006
+    volumes:
+      - phoenix_data:/phoenix
+    networks:
+      - app_network
+    restart: unless-stopped
+
+  # Customer service application (optional - for testing)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customer-service-app
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - LLM_MODEL=smollm2:135m
+      - EMBEDDING_MODEL=nomic-embed-text
+      - PHOENIX_ENDPOINT=http://phoenix:6006
+      - PHOENIX_ENABLED=true
+    depends_on:
+      ollama:
+        condition: service_healthy
+      ollama-init:
+        condition: service_completed_successfully
+      phoenix:
+        condition: service_started
+    networks:
+      - app_network
+    profiles:
+      - full  # Only start with --profile full
+
+volumes:
+  ollama_data:
+    driver: local
+  phoenix_data:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge
+

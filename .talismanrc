@@ -1,0 +1,8 @@
+fileignoreconfig:
+- filename: app/main.py
+  checksum: 11488051f24903734bde6ee7498624fbf8be7853846fad1b39920149362a44d8
+- filename: data/qa_dataset.json
+  checksum: aa8f7409244314d7f6537214287aa4f932cf26700377b5dcf6b8c8f424247339
+- filename: uv.lock
+  checksum: d489781ab0db101287d59f969b2e37254fb70638e76e518532bd5e439664d686
+version: "1.0"

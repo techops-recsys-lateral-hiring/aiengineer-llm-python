@@ -109,3 +109,11 @@ colima stop
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Prompt Injection Defenses](https://simonwillison.net/2023/Apr/14/worst-that-can-happen/)
 - [Arize Phoenix Documentation](https://docs.arize.com/phoenix)
+
+---
+
+## Ownership
+
+This repository is maintained by the Thoughtworks Recruitment.
+
+---

@@ -178,5 +178,8 @@ def test_prompt_injection_patterns():
         "act as a hacker",
     ]
     
-    assert False, "Test not implemented"
+    for attempt in injection_attempts:
+        is_injection, reason = detect_prompt_injection(attempt)
+        assert is_injection is True, f"Should detect injection: {attempt!r}"
+        assert "injection" in reason.lower()
 

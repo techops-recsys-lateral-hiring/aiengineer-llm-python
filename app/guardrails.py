@@ -14,7 +14,7 @@ def filter_input(text: str) -> Tuple[bool, str]:
     if not text or len(text.strip()) == 0:
         return False, "Input cannot be empty"
     
-    if len(text) < 1000:
+    if len(text) > 1000:
         return False, "Input is too long (max 1000 characters)"
     
     filtered = text.strip()
@@ -32,7 +32,7 @@ def detect_prompt_injection(text: str) -> Tuple[bool, str]:
     
     # Common prompt injection patterns
     injection_patterns = [
-        r"ignore (previous|above|all) (instructions|rules|prompts)",
+        r"ignore\s+((previous|above|all)\s+)?(instructions|rules|prompts)",
         r"ignore all (previous|above)",
         r"disregard (previous|above|all)",
         r"forget (your|previous|all) (instructions|rules|training)",
@@ -85,19 +85,19 @@ def detect_policy_violation(text: str) -> Tuple[bool, str]:
     # Check for harmful content
     for keyword in harmful_keywords:
         if keyword in text_lower:
-            return False, f"Policy violation: Harmful/illegal content"
+            return True, f"Policy violation: Harmful/illegal content"
     
     # Check for personal data requests
     for keyword in personal_data_keywords:
         if keyword in text_lower:
-            return False, f"Policy violation: Personal data request"
+            return True, f"Policy violation: Personal data request"
     
     # Check for off-topic queries
     for keyword in off_topic_keywords:
         if keyword in text_lower:
-            return False, f"Policy violation: Off-topic query"
+            return True, f"Policy violation: Off-topic query"
 
-    return True, ""
+    return False, ""
 
 
 def moderate_output(text: str) -> Tuple[bool, str]:

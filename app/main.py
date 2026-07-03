@@ -101,6 +101,7 @@ async def query(request: QueryRequest) -> QueryResponse:
         with tracer.start_as_current_span("customer_query") as span:
             span.set_attribute("input.value", question)
             span.set_attribute("input.length", len(question))
+
             return await _process_query(question, span)
     else:
         return await _process_query(question, None)

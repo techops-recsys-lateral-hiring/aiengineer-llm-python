@@ -179,9 +179,6 @@ async def _process_query(question: str, parent_span) -> QueryResponse:
     try:
         full_prompt = f"{SYSTEM_PROMPT}\n\nCustomer: {filtered_question}\n\nAssistant:"
         response = llm.invoke(full_prompt)
-        print("is_valid = ", is_valid)
-        print("is_injection = ", is_injection)
-        print("is_violation = ", is_violation)
         logger.info(f"LLM response generated: {response[:200]}...")
         
     except Exception as e:

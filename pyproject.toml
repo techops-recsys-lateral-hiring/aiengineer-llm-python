@@ -3,7 +3,7 @@ name = "customer-service-ai"
 version = "1.0.0"
 description = "AI-powered customer service application with guardrails"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.15"
 dependencies = [
     "fastapi>=0.104.0",
     "uvicorn[standard]>=0.24.0",

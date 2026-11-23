@@ -4,18 +4,19 @@ import re
 import sys
 from pathlib import Path
 from typing import Dict, List
-import numpy as np
+
 import httpx
+import numpy as np
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.config import (
-    OLLAMA_BASE_URL,
     EMBEDDING_MODEL,
     LLM_MODEL,
-    PHOENIX_ENDPOINT,
+    OLLAMA_BASE_URL,
     PHOENIX_ENABLED,
+    PHOENIX_ENDPOINT,
 )
 
 # "judge" (LLM-as-judge) or "embedding" (cosine similarity of embeddings)
@@ -35,13 +36,13 @@ SCORE:"""
 tracer = None
 if PHOENIX_ENABLED:
     try:
-        from phoenix.otel import register
         from opentelemetry import trace
-        from opentelemetry.sdk.trace import TracerProvider
+        from phoenix.otel import register
 
         # Register Phoenix tracer
         tracer_provider = register(
-            project_name="customer-service-evaluation", endpoint=f"{PHOENIX_ENDPOINT}/v1/traces",
+            project_name="customer-service-evaluation",
+            endpoint=f"{PHOENIX_ENDPOINT}/v1/traces",
             batch=True,
         )
 

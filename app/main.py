@@ -28,7 +28,8 @@ if PHOENIX_ENABLED:
         # Register Phoenix tracer
         tracer_provider = register(
             project_name="customer-service-ai",
-            endpoint=f"{PHOENIX_ENDPOINT}/v1/traces"
+            endpoint=f"{PHOENIX_ENDPOINT}/v1/traces",
+            batch=True,
         )
         
         # Instrument LangChain

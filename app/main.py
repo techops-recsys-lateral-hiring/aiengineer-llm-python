@@ -59,7 +59,7 @@ llm = OllamaLLM(
     base_url=OLLAMA_BASE_URL,
     model=LLM_MODEL,
     temperature=0.7,
-    max_tokens=200,
+    num_predict=200,
 )
 
 

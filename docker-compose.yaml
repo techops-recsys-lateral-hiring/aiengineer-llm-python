@@ -49,6 +49,7 @@ services:
     environment:
       - PHOENIX_HOST=0.0.0.0
       - PHOENIX_PORT=6006
+      - PHOENIX_ENABLE_AUTH=false
     volumes:
       - phoenix_data:/phoenix
     networks:

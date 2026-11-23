@@ -178,7 +178,7 @@ async def _process_query(question: str, parent_span) -> QueryResponse:
     # Step 4: Call LLM
     try:
         full_prompt = f"{SYSTEM_PROMPT}\n\nCustomer: {filtered_question}\n\nAssistant:"
-        response = llm.invoke(full_prompt)
+        response = await llm.ainvoke(full_prompt)
         logger.info(f"LLM response generated: {response[:200]}...")
         
     except Exception as e:
